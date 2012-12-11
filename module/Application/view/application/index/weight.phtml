@@ -1,0 +1,91 @@
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+    google.load('visualization', '1', {packages: ['corechart']});
+</script>
+
+    <script type="text/javascript">
+function KtoLbs(kilos) {
+    return Math.floor(kilos/0.45359237);
+}
+
+      function drawVisualization() {
+        // Create and populate the data table.
+<?php
+
+
+$weights = $this->singly()->getServices('fitbit', 'weight', array('limit' => '50'));
+?>
+        var data = google.visualization.arrayToDataTable([
+          ['Date', 'Weight', 'BMI'],
+<?php
+$count = 0;
+foreach ($weights as $weight) {
+    $count ++;
+    if (isset($weight->data->weight)) {
+        if (sizeof($weight->data->weight)) {
+            foreach ($weight->data->weight as $data) {
+             ?>
+
+             ['<?= $this->escapeHtml($data->date); ?>',
+              KtoLbs(<?= $this->escapeHtml($data->weight); ?>),
+              <?= $this->escapeHtml($data->bmi); ?>]
+            <?php
+                if (sizeof($weights) != $count) echo ',';
+            }
+        }
+    }
+}
+?>]);
+
+        // Create and draw the visualization.
+        new google.visualization.AreaChart(document.getElementById('visualization')).
+            draw(data, {curveType: "function",
+                        width: 800, height: 400,
+                        vAxis: {maxValue: 10}}
+                );
+      }
+
+      google.setOnLoadCallback(drawVisualization);
+    </script>
+
+<h1>You are logged in to FitBit</h1>
+<h2>User Id <?= $this->singly()->getIdentity(); ?></h2>
+
+<h3>Scale Readings</h3>
+
+<div id="visualization" style="width: 500px; height: 400px;"></div>
+
+<div class="row">
+    <div class="span2">
+        <h5>Date</h5>
+    </div>
+    <div class="span2">
+        <h5>Time</h5>
+    </div>
+    <div class="span2">
+        <h5>Weight</h5>
+    </div>
+    <div class="span2">
+        <h5>BMI</h5>
+    </div>
+</div>
+
+<?php
+foreach ($weights as $weight) {
+    if (isset($weight->data->weight)) {
+        if (sizeof($weight->data->weight)) {
+            foreach ($weight->data->weight as $data) {
+             ?>
+             <div class="row">
+             <div class="span2"><pre><?= $this->escapeHtml($data->date); ?></pre></div>
+             <div class="span2"><pre><?= $this->escapeHtml($data->time); ?></pre></div>
+             <div class="span2"><pre><?= floor($data->weight/0.45359237); ?>lbs&nbsp;&nbsp;<?= $data->weight; ?>kg</pre></div>
+             <div class="span2"><pre><?= $this->escapeHtml($data->bmi); ?></pre></div>
+             </div>
+             <?php
+
+            }
+        }
+    }
+}
+?>
