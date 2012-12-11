@@ -3,7 +3,7 @@ ZF2 Singly Module Example Application
 
 Introduction
 ------------
-This is a simple module to show your weight over time as a graph from Fitbit using the Singly API.
+This is a sample application to show your weight over time as a graph from Fitbit using the Singly API.
 
 
 Installation
