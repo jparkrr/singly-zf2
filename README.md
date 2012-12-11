@@ -17,7 +17,7 @@ git checkout example
 ./composer.phar install
 ```
 
-Edit config/autoload/module.singly.local.php and add your Singly identification
+Edit config/autoload/module.singly.local.php and add your Singly credentials
 
 ```
 return array(
