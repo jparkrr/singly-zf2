@@ -34,6 +34,6 @@ php -S localhost:8080
 
 and browse to 
 
-``
+```
 http://localhost:8080
 ```
